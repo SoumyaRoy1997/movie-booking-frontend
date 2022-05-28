@@ -1,0 +1,71 @@
+<!-- <ion-spinner *ngIf="loading" name="circles"></ion-spinner> -->
+
+<mat-spinner *ngIf="loading"  backdropEnabled="true" positionGloballyCenter="true"></mat-spinner>
+<mat-tab-group dynamicHeight *ngIf="!loading">
+  <mat-tab label="Log In">
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)=getLogin(username.value,password.value)>
+        <h2>Log In</h2>
+        <mat-error *ngIf="loginInvalid">
+          The username and password were not recognised
+        </mat-error>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <input matInput #username placeholder="username">
+              <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+              <mat-error>
+                Please provide a valid Username
+              </mat-error>
+            </mat-form-field>
+          
+            <mat-form-field appearance="outline">
+                    <mat-label>passowrd</mat-label>
+                    <input matInput #password placeholder="passowrd" class="mdc-floating-label" id="my-label-id" aria-invalid="false" aria-required="true" [type]="hide ? 'password' : 'text'">
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <!-- <mat-error *ngIf="loginForm.hasError('required')">
+                      Password<strong>required</strong>
+                    </mat-error> -->
+                   
+        </mat-form-field>
+        <p>
+        <button type="submit" mat-raised-button color="primary">Login</button>
+        <div class="icon-group">
+          <a class="btn btn-outline-dark" (click)="googlesignin()" role="button" style="text-transform:none">
+            <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="../assets/google.jpg" />
+            Login with Google
+          </a>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</mat-tab>
+  <mat-tab label="Registration">
+    <ion-card>
+      <ion-card-content>
+    <div class="form-row">
+      <form [formGroup]="registrationForm">
+      <h2>Registration</h2>
+    <div class="form-group col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput #Regusername placeholder="username">
+          </mat-form-field>
+    </div>
+    <div class="form-group col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput #Regpassword placeholder="password">
+          </mat-form-field>
+    </div>
+      <button type="submit" class="btn btn-outline-success" (click)="getRegistration(Regusername.value,Regpassword.value)">Register</button>
+    </form>
+    </div>
+    </ion-card-content>
+    </ion-card>
+  </mat-tab>
+  </mat-tab-group>
+ 

@@ -1,0 +1,8 @@
+{
+  "name": "Movie-Booking-App",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

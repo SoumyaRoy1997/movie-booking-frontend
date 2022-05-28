@@ -1,0 +1,94 @@
+<ion-content *ngIf="movie!=null" color = "accent" >
+  <div class="conetnt">
+<div class="row">
+<div class="col-md-3" id="img">
+  <ion-img class="poster" [src]=movie.poster></ion-img>
+  <br>
+  <div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8" style="display: flex;">
+    <button mat-stroked-button class="btn btn-outline-primary"><ion-icon name="logo-facebook"></ion-icon></button>
+  <span class="example-spacer"></span>
+  <button mat-stroked-button class="btn btn-outline-success"><ion-icon name="logo-twitter"></ion-icon></button>
+  <span class="example-spacer"></span>
+  <button mat-stroked-button class="btn btn-outline-secondary"><ion-icon name="logo-instagram"></ion-icon></button>
+  <br>
+  </div>
+  <div class="col-md-2"></div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <span class="example-spacer"></span>
+    <button mat-raised-button class="btn btn-outline-warning" (click)="bookTickets(movie.id)" >Book Tickets</button>
+  <br>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+</div>
+<div class="col-md-9">
+  <h1 style="font: bold;"><strong>Title - </strong>{{movie.title}}</h1>
+  <h2 style="font: 900;">Overview</h2>
+  <p>{{movie.plot}}</p>
+  <button mat-button disabled><i class="fa fa-imdb" style="font-size:40px;color:yellow"></i>  <strong>  {{movie.imdb.rating}}</strong></button>
+  <span class="example-spacer"></span>
+  <br>
+  <br>
+  <br>
+  <!-- <button mat-button disabled><mat-icon class="mat-icon-rtl-mirror" svgIcon="thumb-up"></mat-icon></button> -->
+  <strong>Featured Cast</strong>
+  <br>
+  <br>
+  <div class="row">
+  <div class="col-sm-4">
+  <div class="scene1">
+    <div class="row carousel1">
+      <div class="carousel__cell1"><img [src]="images[0]" alt="Random slide"></div>
+    </div>
+  </div>
+  </div>
+  <span class="example-spacer"></span> 
+  <div class="col-sm-4">
+  <div class="scene2">
+    <div class="row carousel2">
+      <div class="carousel__cell2"><img [src]="images[1]" alt="Random slide"></div>
+    </div>
+  </div>
+  </div>
+  <span class="example-spacer"></span>
+  <div class="col-sm-4">
+  <div class="scene3">
+    <div class="carousel3">
+      <div class="carousel__cell3"><img [src]="images[2]" alt="Random slide"></div>
+    </div>
+  </div>
+  </div>
+</div>
+<br><br>
+<strong>Cast & Crew</strong>
+<div class="row">
+<div class="col-md-9">
+  <strong>Actors</strong>
+  <div class="row">
+  <ion-card class="col-md-3" *ngFor = "let actor of movie.cast">
+  <ion-card-content>
+      {{actor}}
+  </ion-card-content>
+</ion-card>
+</div>
+<strong>Directors</strong>
+<div class="row">
+  <ion-card class="col-md-3" *ngFor = "let director of movie.directors">
+    <ion-card-content>
+        {{director}}
+    </ion-card-content>
+  </ion-card>
+  </div>
+</div>
+<div class="col-md-3"></div>
+</div>
+</div>
+</div>
+</div>
+  </ion-content>

@@ -1,0 +1,17 @@
+th, td {
+  padding: 7px;
+}
+table{
+  display: flex;
+}
+@mixin _border($color)
+{
+  border-radius: 25px;
+  border: 2px solid $color;
+}
+.screen{
+  display: flex;
+  background-color: coral;
+  text-align: center;
+  @include _border(black);
+}

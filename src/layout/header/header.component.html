@@ -1,0 +1,28 @@
+<ion-header translucent>
+  <ion-toolbar color="accent">
+    <div class="row">
+    <div class="col col-md-1" routerLink="/home">
+    <a class="logo"><ion-avatar><ion-img src="../assets/icon/chair-icon.webp"></ion-img></ion-avatar></a></div>
+    <div class="col col-md-8"></div>
+    <div class="col-md-2" style="margin: 1em auto auto;">
+      <ng-template [ngIf]="isAuthenticated">
+      <button mat-button (click)="selectCity()"><a style="cursor: pointer;" appDropdown class="dropdown-toggle" role="button" *ngIf="city!=null">
+      {{city}}<span class="caret"></span></a></button>
+      <button mat-button (click)="selectCity()"><a style="cursor: pointer;" appDropdown class="dropdown-toggle" role="button" *ngIf="city==null">
+        Select City<span class="caret"></span></a></button>
+        </ng-template>
+    </div>
+    <div class="col col md-1" style="margin: 1em auto auto;">
+      <ng-template [ngIf]="isAuthenticated ">
+        <ng-template [ngIf]="user.rolemap == '2'">
+                <button mat-button [matMenuTriggerFor]="menu" ><span class="material-icons">account_circle</span><span class="caret"></span></button>
+                <mat-menu #menu="matMenu" >
+                    <button mat-menu-item (click)="openEditDialog()">View Profile</button>
+                  <button mat-menu-item (click)="logoutUser()">Logout</button>
+                </mat-menu>
+          </ng-template>
+      </ng-template>
+      </div>
+        </div>
+  </ion-toolbar>
+</ion-header>

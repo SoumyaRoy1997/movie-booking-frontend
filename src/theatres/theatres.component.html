@@ -1,0 +1,44 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Theatres</ion-title>
+    <ion-buttons slot="end">
+      <button mat-button (click)="selectCity()"><a style="cursor: pointer;" appDropdown class="dropdown-toggle" role="button" *ngIf="city!=null">
+        {{city}}<span class="caret"></span></a></button>
+        <button mat-button (click)="selectCity()"><a style="cursor: pointer;" appDropdown class="dropdown-toggle" role="button" *ngIf="city==null">
+          Select City<span class="caret"></span></a></button>
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+      <ion-item *ngFor="let theatre of filterTheatres">
+        <ion-label ><span style="float: left; flex-wrap: wrap;">{{theatre.theatreName}} </span><span style="float: left; flex-wrap: wrap;">&nbsp;{{theatre.location.address.city}} </span><br>
+        <br>
+        <ion-buttons>
+        <span *ngFor="let screen of theatre.screens" >
+          <span *ngFor="let show of screen.shows">
+              <span *ngIf="show.showId==movieId">
+                <span *ngFor="let timings of show.showTimings">
+                  <button mat-stroked-button class="btn btn-outline-primary" style="float: left; flex-wrap: wrap;" (click)="bookTickets(theatre,screen,show,timings)">{{timings.timming}}</button>&nbsp;
+                </span>
+              </span>
+          </span>
+        </span>
+        </ion-buttons>
+      </ion-label> 
+        <button mat-stroked-button class="btn btn-outline-secondary" (click)="getMap(theatre.location.geo.coordinates[1],theatre.location.geo.coordinates[0])">
+          <ion-icon name="map"></ion-icon> {{mapText}}</button> &nbsp; &nbsp;
+        <div id="map" #mapElement style="display: none;"></div>
+      </ion-item>
+  </ion-list>
+
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <ng-container *ngIf="!filterflag" ><strong>No Theatres in {{city}}</strong></ng-container>
+      <button mat-button (click)="showAll()">Show All Theatres</button>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</ion-content> 

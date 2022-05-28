@@ -1,0 +1,67 @@
+<ion-content fullscreen>
+  <div class="content">
+          <div id="header">
+          <div class="row profileImage">
+            <div class="col-md-8">
+            <ion-avatar class="ion-margin-start" style="color: white;">
+              <img src="../assets/user.png">
+            </ion-avatar>
+            <div style="height:0px;overflow:hidden">
+            <input id="upload" type="file" class="custom-file-input" (change)="onFileChange($event)">
+            </div>
+            <button mat-stroked-button (click)="uploadPhoto()">Upload Photo</button>
+            <br>
+          </div>
+          <div class="col-md-2"><br></div>
+            <div class="col-md-2">
+        <ion-buttons slot="end" >
+          <ion-button >Facebook</ion-button>
+        </ion-buttons>
+        </div>
+        </div>
+        </div>
+        <mat-tab-group>
+          <mat-tab label="Bookings">
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <ng-template [ngIf]="loading">
+                <ng-template [ngIf]="counter==booking.length">
+                  <mat-card class="ticket" *ngFor="let bookings of booking">
+                    <div class="row">
+                      <div class="col-md-2"></div>
+                        <div class="col-md-3 col-xs-2" >
+                          <div class="poster">
+                          <ion-img class="poster" [src]=bookings.response.poster></ion-img>
+                          </div>
+                          </div>
+                          <div class="col-md-5">
+                          <p><strong>{{bookings.response.movieName}}</strong></p><p>
+                          {{bookings.response.theatreAddress.address.city}}, {{bookings.response.theatreAddress.address.street}}</p>
+                          {{bookings.response.time}}
+                          <br>
+                          {{bookings.noOfTickets}} Ticket<br>
+                          Rs. {{bookings.price}}
+                          </div>
+                          <div class="col-md-2"></div>
+                          </div>
+                </mat-card>
+                </ng-template>
+                </ng-template>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+            <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+              <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more data...">
+              </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+          </mat-tab>
+          <mat-tab label="Settings"> Settings </mat-tab>
+          <mat-tab label="Preferences">
+            <div class="heading">Which movies do you like?</div>
+          </mat-tab>
+        </mat-tab-group>
+  </div>
+</ion-content>

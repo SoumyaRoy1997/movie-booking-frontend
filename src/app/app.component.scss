@@ -1,0 +1,14 @@
+$myWidth: 100%;
+$myheight: 100%;
+
+ion-app{
+    background-image: url("../assets/background.jpg");
+    width: $myWidth;
+    height: $myheight;
+    overflow: auto;
+    background: {
+      position: center;
+      repeat: no-repeat;
+      size: cover;
+    };
+}

@@ -1,0 +1,122 @@
+<ion-content>
+  <div class="searchbar" style="width: 60%;">
+  <ion-searchbar animated id="search" (keyup)="search($event)">
+  </ion-searchbar>
+  </div>
+  <form [formGroup]="filterform" (ngSubmit)="filter(filterform)">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="language" multiple>
+              <mat-option value="English">English</mat-option>
+              <mat-option value="Hindi">Hindi</mat-option>
+              <mat-option value="Bengali">Bengali</mat-option>
+              <mat-option value="French">French</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Genre</mat-label>
+            <mat-select formControlName="genre">
+              <mat-option value="option1">Option 1</mat-option>
+              <mat-option value="option3">Option 3</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Distance</mat-label>
+            <mat-select formControlName="distance">
+              <mat-option value="option1"> Less than 5 Km</mat-option>
+              <mat-option value="option2">Within 10 Km</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>  
+    </div>
+    <div class="col-md-2">
+      <ng-template [ngIf]="filterform.value.language !== '' || filterform.value.distance !== '' || filterform.value.genre !== ''">
+        <button align="end" mat-stroked-button class="btn btn-outline-success">Search</button>
+        <button type="button" mat-stroked-button class="btn btn-outline-danger"  (click)="clearFilter()">Clear</button>
+        </ng-template>
+    </div>
+  </div>
+</form>
+<mat-tab-group #tabGroup (selectedTabChange)="tabChanged($event)">
+<mat-tab label="Now Showing" >
+<div class="columns is-multiline">
+  <mat-card class="column is-3-desktop is-6-tablet content has-text-centered" *ngFor="let movie of filternowShowing" (click)="viewMovie(movie)" style="cursor: pointer;">
+      <ion-avatar item-start *ngIf=isImageExist(movie.poster)>
+        <ion-img [src]="movie.poster"></ion-img>
+      </ion-avatar>
+      <ion-avatar item-start *ngIf=!isImageExist(movie.poster)>
+        <ion-img src="../assets/default-image.png"></ion-img>
+      </ion-avatar>
+      <div *ngIf=isImageExist(movie.poster) style="height: 40%">
+        <img [src]=movie.poster style="overflow: hidden; width: auto; height: 100%;"/>
+      </div>
+      <div *ngIf=!isImageExist(movie.poster) style="height: 40%">
+        <img src="../assets/default-image.png" style="overflow: hidden; width: auto; height: 100%;"/>
+      </div>
+      <h4 style="margin-top: 15px; color: #6aaf4e;">{{ movie.title}}</h4>
+      <p>
+        <span class="tag is-rounded">{{ movie.year }}</span>
+        <span class="tag is-rounded is-warning">{{ movie.rated }}</span>
+      </p>
+      <mat-card-content>
+        <p>
+          {{movie.plot}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions>
+</mat-card>
+</div>
+</mat-tab>
+<mat-tab label="Comming Soon" >
+  <div class="columns is-multiline">
+    <mat-card class="column is-3-desktop is-6-tablet content has-text-centered" *ngFor="let movie of filtercommingSoon" (click)="viewMovie(movie)" style="cursor: pointer;">
+        <ion-avatar item-start *ngIf=isImageExist(movie.poster)>
+          <ion-img [src]="movie.poster"></ion-img>
+        </ion-avatar>
+        <ion-avatar item-start *ngIf=!isImageExist(movie.poster)>
+          <ion-img src="../assets/default-image.png"></ion-img>
+        </ion-avatar>
+        <div *ngIf=isImageExist(movie.poster) style="height: 40%">
+          <img [src]=movie.poster style="overflow: hidden; width: auto; height: 100%;"/>
+        </div>
+        <div *ngIf=!isImageExist(movie.poster) style="height: 40%">
+          <img src="../assets/default-image.png" style="overflow: hidden; width: auto; height: 100%;"/>
+        </div>
+        <h4 style="margin-top: 15px; color: #6aaf4e;">{{ movie.title}}</h4>
+        <p>
+          <span class="tag is-rounded">{{ movie.year }}</span>
+          <span class="tag is-rounded is-warning">{{ movie.rated }}</span>
+        </p>
+        <mat-card-content>
+          <p>
+            {{movie.plot}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
+  </mat-card>
+  </div>
+</mat-tab>
+</mat-tab-group>
+<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll-content
+    loadingSpinner="bubbles"
+    loadingText="Loading more data...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>

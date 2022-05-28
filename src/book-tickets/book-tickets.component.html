@@ -1,0 +1,48 @@
+<ion-content fullscreen>
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>{{theatre.theatreName}} {{theatre.location.address.city}}</ion-title>
+    <ion-buttons slot="end" >
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6">
+<ng-container *ngIf="book">
+  <button mat-button class="btn btn-outline-success" [matTooltip]=ticket (click)="payment()">Proceed to Payment</button>
+</ng-container>
+</div>
+<div class="col-md-3"></div>
+</div>
+<table>
+  <tbody>
+    <tr>
+      <th *ngFor="let row of rows; let i=index">
+        {{i+1}}
+      </th>
+    </tr>
+    <tr nowrap *ngFor="let collumn of seatsDummy; let j= index">           
+      <td *ngFor="let row of rows; let i=index" align-items-center>
+        <ng-template [ngIf]="disableBooking[(j*10)+i]">
+          <mat-icon [svgIcon]=seats[(j*10)+i] style="cursor: pointer;" matTooltip="Seat Booked"></mat-icon>  
+        </ng-template>
+        <ng-template [ngIf]="!disableBooking[(j*10)+i]">
+        <mat-icon [svgIcon]=seats[(j*10)+i] (click)="bookSeat((j*10)+i,seatNo[j])" style="cursor: pointer;" matTooltip="Seat Available"></mat-icon>
+        </ng-template>
+      </td>&nbsp; &nbsp; <strong>{{seatNo[j]}}</strong>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="screen"><strong style="text-align: center;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   Screen This Way</strong></div>
+   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

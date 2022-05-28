@@ -1,0 +1,331 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Payment</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()">Go Back</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+<div class="row">
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-11">
+    <ion-card>
+      <div class="row">
+        <div class="col-md-6">
+      <strong>Quick Payment</strong>
+    </div>
+    <div class="col-md-6">
+      <strong slot="end">Amount: {{cost}}</strong>
+    </div>
+      </div>
+    </ion-card>
+    <ng-template [ngIf]="!loading">
+    <ion-card>
+    <ion-list>
+      <ion-item *ngFor="let payment of user.preferences.savedPayments; let i=index" >
+        <ion-label *ngIf="payment.type =='Card'" >
+          <mat-icon [svgIcon]="payment.cardType"></mat-icon>
+          {{payment.bank}}
+          <br>
+          {{payment.card.substring(0,2)}}xxxxxx{{payment.card.substring(11,payment.card.length)}}
+          <div [id]="i" style="display: none;">
+            <mat-form-field appearance="outline">
+              <mat-label>PIN</mat-label>
+              <input matInput #pin  placeholder="PIN" >
+              <mat-error>
+                Please provide a valid PIN
+              </mat-error>
+            </mat-form-field>
+            <br>
+            <button align="end" mat-stroked-button class="btn btn-outline-success" (click)="checkPin(pin.value,payment)">Pay</button>
+          </div>
+        </ion-label>
+        <ion-label *ngIf="payment.type =='UPI'" >
+          <mat-icon [svgIcon]="payment.upiMerchant"></mat-icon>
+          {{payment.bank}}
+          <br>
+          {{payment.upi.substring(0,2)}}xxxxxx{{payment.upi.substring(5,payment.upi.length)}}
+          <div [id]="i" style="display: none;">
+            <mat-form-field appearance="outline">
+              <mat-label>CVV</mat-label>
+              <input matInput #pin placeholder="CVV" >
+              <mat-error>
+                Please provide a valid CVV
+              </mat-error>
+            </mat-form-field>
+            <br>
+            <button align="end" mat-stroked-button class="btn btn-outline-success" (click)="checkPin(pin.value,payment)">Pay</button>
+          </div>
+        </ion-label>
+        <ion-icon slot="end" name="chevron-forward-outline" (click)="quickPayment(payment,i)" style="cursor: pointer;"></ion-icon>
+      </ion-item>
+      </ion-list>
+    </ion-card>
+    </ng-template>
+    <ion-card>
+      <strong>More Payment Options</strong>
+    <ion-list>
+      <ion-item >
+        <ion-label>
+          <div class="row">
+            <div class="col-md-11">
+            <h3 style="cursor: pointer;" (click)="card()"><mat-icon svgIcon="card"></mat-icon>Credit/Debit Cards</h3>
+          <ng-template [ngIf]=credit>
+            <form [formGroup]="cardform" (ngSubmit)="payCard(cardform)">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Bank Name</mat-label>
+                      <mat-select formControlName="bankName">
+                        <mat-option *ngFor="let banks of banknames;" [value]="banks" >
+                          <mat-icon [svgIcon]="banks"></mat-icon>{{banks}}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput  placeholder="Bank Name" formControlName="bankName"> -->
+                      <mat-error>
+                        Please provide a valid Bank Name
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Card Type</mat-label>
+                      <mat-select formControlName="cardType">
+                        <mat-option *ngFor="let card of cardType;" [value]="card" >
+                          <mat-icon [svgIcon]="card"></mat-icon>{{card}}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput  placeholder="Bank Name" formControlName="bankName"> -->
+                      <mat-error>
+                        Please provide a valid Card Type
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Card No.</mat-label>
+                      <input matInput  placeholder="Card No." formControlName="cardNo">
+                      <mat-error>
+                        Please provide a valid Card No.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>CVV</mat-label>
+                      <input matInput  placeholder="CVV" formControlName="cvv">
+                      <mat-error>
+                        Please provide a valid CVV
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row" *ngIf="cardform.status === 'VALID'">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-3">
+                    <button align="end" mat-stroked-button class="btn btn-outline-success">Pay</button>
+                  </div>
+                  <div class="col-md-7">
+                    <ion-item >
+                      <ion-label>Save Card for later</ion-label>
+                    <ion-checkbox color="primary" formControlName="saveCard" slot="start"></ion-checkbox>
+                    </ion-item>
+                  </div>
+                  </div>  
+              </form>
+          </ng-template>
+        </div>
+          <div class="col-md-1">
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+        </ion-label>
+      </ion-item>
+      <ion-item >
+        <ion-label>
+          <div class="row">
+          <div class="col-md-11">
+            <h3 style="cursor: pointer;" (click)="_netbanking()"><mat-icon svgIcon="netbank"></mat-icon>Net Banking </h3>
+            <ng-template [ngIf]=netbanking>
+              <form [formGroup]="cardform" (ngSubmit)="payCard(cardform)">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Bank Name</mat-label>
+                      <mat-select formControlName="bankName">
+                        <mat-option *ngFor="let banks of banknames;" [value]="banks" >
+                          <mat-icon [svgIcon]="banks"></mat-icon>{{banks}}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput  placeholder="Bank Name" formControlName="bankName"> -->
+                      <mat-error>
+                        Please provide a valid Bank Name
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Card Type</mat-label>
+                      <mat-select formControlName="cardType">
+                        <mat-option *ngFor="let card of cardType;" [value]="card" >
+                          <mat-icon [svgIcon]="card"></mat-icon>{{card}}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <input matInput  placeholder="Bank Name" formControlName="bankName"> -->
+                      <mat-error>
+                        Please provide a valid Card Type
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Card No.</mat-label>
+                      <input matInput  placeholder="Card No." formControlName="cardNo">
+                      <mat-error>
+                        Please provide a valid Card No.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>CVV</mat-label>
+                      <input matInput  placeholder="CVV" formControlName="cvv">
+                      <mat-error>
+                        Please provide a valid CVV
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row" *ngIf="cardform.status === 'VALID'">
+                  <div class="col-md-2"></div>
+                  <div class="col-md-3">
+                    <button align="end" mat-stroked-button class="btn btn-outline-success">Pay</button>
+                  </div>
+                  <div class="col-md-7">
+                    <ion-item >
+                      <ion-label>Save Card for later</ion-label>
+                    <ion-checkbox color="primary" formControlName="saveCard" checked slot="start"></ion-checkbox>
+                    </ion-item>
+                  </div>
+                  </div>  
+              </form>
+            </ng-template>
+          </div>
+          <div class="col-md-1">
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </div>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item >
+        <ion-label>
+          <div class="row">
+          <div class="col-md-11">
+            <h3 style="cursor: pointer;" (click)="_upi()"><mat-icon svgIcon="upi"></mat-icon>UPI</h3>
+            <ng-template [ngIf]=upi>
+              <form [formGroup]="upiform" (ngSubmit)="payUpi(upiform)">
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>UPI Merchant</mat-label>
+                      <mat-select formControlName="upimerch">
+                        <mat-option *ngFor="let upiMerch of upiMerchNames;" [value]="upiMerch" >
+                          <mat-icon [svgIcon]="upiMerch"></mat-icon>{{upiMerch}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>
+                        Please provide a valid UPI Merchant
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Bank Name</mat-label>
+                      <mat-select formControlName="bankName">
+                        <mat-option *ngFor="let banks of banknames;" [value]="banks" >
+                          <mat-icon [svgIcon]="banks"></mat-icon>{{banks}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>
+                        Please provide a valid Bank Name
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>UPI ID</mat-label>
+                      <input matInput  placeholder="Card No." formControlName="upiId">
+                      <mat-error>
+                        Please provide a valid UPI ID
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline">
+                      <mat-label>PIN</mat-label>
+                      <input matInput  placeholder="PIN" formControlName="pin">
+                      <mat-error>
+                        Please provide a valid PIN
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row" *ngIf="upiform.status === 'VALID'">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">
+                  <button align="end" mat-stroked-button class="btn btn-outline-success">Pay</button>
+                </div>
+                <div class="col-md-7">
+                  <ion-item >
+                    <ion-label>Save Card for later</ion-label>
+                  <ion-checkbox color="primary" formControlName="saveCard" checked slot="start"></ion-checkbox>
+                  </ion-item>
+                </div>
+                </div>  
+              </form>
+            </ng-template>
+          </div>
+          <div class="col-md-1">
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </div>
+          </div>
+        </ion-label>
+      </ion-item>
+      </ion-list>
+      </ion-card>
+  </div>
+</div>
+<div id="content" *ngIf="download">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <div style="margin: 10em auto auto;">
+      <strong style="text-align: center;">Payment for {{user.username}}</strong>
+      <br>
+      <h2>Seats:</h2>
+      <h3>{{seats}}</h3>
+      <h3>Total Amount: {{cost}}</h3>
+      </div>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+</ion-content>

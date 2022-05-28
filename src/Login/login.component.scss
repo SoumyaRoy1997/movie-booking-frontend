@@ -1,0 +1,65 @@
+mat-label{
+    max-width: 400px;
+    margin: 7em auto;
+    text-align: center;
+    color: black;    
+  }
+@mixin _border($color)
+{
+  border-radius: 25px;
+  border: 2px solid $color;
+}
+ion-spinner{
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+  display: flex;
+}
+h2{
+  color: black;
+}
+mat-tab-group{
+  @extend mat-label;
+  @include _border(black);
+}  
+ion-card {
+   
+    display: auto;
+    opacity: 0.8;
+    @include _border(purple);
+  }  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Extra style for the cancel button (red) */
+  .cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+  }
+  
+  /* Center the avatar image inside this container */
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+  }
+  
+  /* Avatar image */
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  
+  /* Add padding to containers */
+  .container {
+    padding: 16px;
+  }
+  
+  /* The "Forgot password" text */
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+  
+ 

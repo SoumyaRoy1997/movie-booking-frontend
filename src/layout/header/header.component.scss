@@ -1,0 +1,21 @@
+
+
+ion-toolbar a.logo {
+    font-size: 25px;
+    font-weight: bold;
+  }
+  
+  /* Change the background color on mouse-over */
+  ion-toolbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Style the active/current link*/
+  ion-toolbar a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }

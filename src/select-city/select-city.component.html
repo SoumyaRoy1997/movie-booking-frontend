@@ -1,0 +1,24 @@
+
+  <ion-header translucent>
+    <ion-toolbar>
+      <ion-title><ion-icon name="chevron-back-outline" (click)="dismissModal()"></ion-icon>
+        {{city}}
+      </ion-title>
+      <ion-buttons slot="end">
+        <button mat-button class="btn btn-outline-primary" (click)="findUserLocation()"><span class="material-icons">
+          navigation
+          </span>Detect Location</button>  
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
+  <br>
+  <br>
+  <strong style="margin: 2em 2em 2em 2em;">Popular Cities:</strong>
+  <div class="columns is-multiline" style="margin:1em auto auto">
+    <div class="column is-3-desktop is-6-tablet content has-text-centered" *ngFor="let city of cities">
+      <mat-icon [svgIcon]=city style="size: 4em;cursor: pointer;" (click)="selectCity(city)"></mat-icon>
+      <p>{{city}}</p>
+    </div>
+    </div>
+</ion-content>
